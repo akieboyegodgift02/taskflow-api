@@ -1,40 +1,44 @@
-# 🚀 TaskFlow API
+# TaskFlow Backend API
 
-> A robust, production-ready RESTful API for team-based project and task management, built to demonstrate scalable backend architecture, secure authentication, and efficient database design.
+A production-ready, enterprise-grade task and project management backend API built with Node.js, Express (v5), TypeScript, PostgreSQL, and Zod.
 
----
+## Tech Stack
+* **Runtime:** Node.js (ESM modules with `.js` extensions under NodeNext)
+* **Framework:** Express.js
+* **Language:** TypeScript
+* **Database:** PostgreSQL (Neon Cloud)
+* **Validation:** Zod
+* **Security:** JWT (JSON Web Tokens), bcrypt (Password Hashing)
 
-## 🛠️ Tech Stack
+## Architecture
+The application strictly follows a **Layered Architecture (Controller-Service-Route)**:
+* **Routes (`src/routes/`)**: Define endpoints and apply middleware (`protect`, RBAC).
+* **Controllers (`src/controllers/`)**: Handle HTTP requests and responses, invoking validation and services.
+* **Services (`src/services/`)**: Contain core business logic and direct database queries.
+* **Schemas (`src/schemas/`)**: Zod schemas for runtime request validation.
 
-* **Runtime/Framework:** [e.g., Node.js, Express.js / Python, FastAPI / Go, Gin]
-* **Database:** [e.g., PostgreSQL with Prisma ORM / MongoDB with Mongoose]
-* **Caching & Rate Limiting:** Redis
-* **Authentication:** JSON Web Tokens (JWT) & bcrypt
-* **Validation:** [e.g., Zod / Joi]
-* **DevOps & Tooling:** Docker, Docker Compose, Git
+## API Endpoints Summary
 
----
+### Authentication (`/api/v1/auth`)
+* `POST /register` - Register a new user
+* `POST /login` - Authenticate and receive JWT token
 
-## ✨ Key Features
+### Teams & RBAC (`/api/v1/teams`)
+* `GET /` - List user teams
+* `POST /` - Create a new team
+* `POST /:teamId/invite` - Invite member to team (Admin only)
 
-* **Secure Authentication & RBAC:** Implements secure JWT authentication with HTTP-only cookies/headers and Role-Based Access Control (Admin, Manager, Member) to protect sensitive endpoints.
-* **Relational Data Modeling:** Designed an optimized database schema managing relationships between Users, Organizations, Projects, and Tasks.
-* **Advanced Querying:** Supports pagination, filtering by status/priority, and keyword search to handle large datasets efficiently.
-* **Rate Limiting & Security:** Integrated Redis-based rate limiting to prevent brute-force and DDoS attacks, alongside security headers (Helmet) and input sanitization.
-* **Background Processing:** Handles asynchronous tasks (like welcome emails and weekly digests) using a message queue.
+### Projects (`/api/v1/teams/:teamId/projects`)
+* `GET /` - List team projects (Member+)
+* `POST /` - Create a project (Admin, Manager)
 
----
+### Tasks (`/api/v1/teams/:teamId/projects/:projectId/tasks`)
+* `GET /` - List project tasks with optional status filter
+* `POST /` - Create a task (Admin, Manager)
+* `PATCH /:taskId/status` - Update task status (`TODO`, `IN_PROGRESS`, `DONE`)
 
-## 📁 Architecture & Project Structure
-
-The project follows a clean **MVC / Layered Architecture** separation of concerns:
-
-```text
-src/
-├── config/        # Database and environment configurations
-├── controllers/   # Request handlers and business logic routing
-├── middleware/    # Auth, validation, error handling, and rate limiting
-├── models/        # Database schemas and data access layer
-├── routes/        # API endpoint definitions
-├── services/      # Core business logic and external integrations
-└── utils/         # Helper functions and loggers"# taskflow-api" 
+## Getting Started
+1. Clone the repository.
+2. Install dependencies: `npm install`
+3. Configure your `.env` file with `PORT`, `DATABASE_URL`, and `JWT_SECRET`.
+4. Run in development mode: `npm run dev`

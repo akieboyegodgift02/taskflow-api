@@ -7,6 +7,8 @@ import { AppError } from './errors/appError.js';
 // Routes
 import authRoutes from "./routes/authRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js"
+import projectRoutes from "./routes/projectRoute.js";
+import taskRoutes from "./routes/taskRoutes.js";
 
 const app = express();
 
@@ -20,6 +22,8 @@ app.use(express.urlencoded({ extended: true }));
 //use routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/teams', teamRoutes);
+app.use("/api/v1/teams/:teamId/projects", projectRoutes);
+app.use("/api/v1/teams/:teamId/projects/:projectId/tasks", taskRoutes);
 
 // Health Check Endpoint
 app.get('/health', (req: Request, res: Response) => {

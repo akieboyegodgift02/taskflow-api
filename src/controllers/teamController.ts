@@ -40,3 +40,5 @@ export const inviteMember = async (req: AuthenticatedRequest, res: Response, nex
     next(error);
   }
 };
+
+
